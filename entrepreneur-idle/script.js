@@ -3,6 +3,14 @@ const state = {
   cash: 0,
   revenuePerClick: 1,
   revenuePerSecond: 0,
+  equipmentUpgrades: [
+    { id: 'basic_laptop', name: 'Basic Laptop', cost: 25, clickBonus: 2, count: 0 },
+    { id: 'power_bank', name: 'Power Bank', cost: 150, clickBonus: 5, count: 0 },
+    { id: 'crm_software', name: 'CRM Software', cost: 750, clickBonus: 12, count: 0 },
+    { id: 'virtual_assistant', name: 'VA Assistant', cost: 3000, clickBonus: 30, count: 0 },
+    { id: 'automation_tool', name: 'Auto-Tool Suite', cost: 15000, clickBonus: 80, count: 0 },
+    { id: 'ai_co_founder', name: 'AI Co-Founder', cost: 75000, clickBonus: 250, count: 0 }
+  ],
   upgrades: [
     { id: 'freelance', name: 'Freelance Gigs', cost: 15, revenue: 1, count: 0 },
     { id: 'tutoring', name: 'Online Tutoring', cost: 100, revenue: 5, count: 0 },
@@ -12,6 +20,7 @@ const state = {
     { id: 'agency', name: 'Digital Agency', cost: 50000, revenue: 2500, count: 0 }
   ],
   prestigeLevel: 0,
+  totalBusinessesOwned: 0,
   totalCashEarned: 0
 };
 
@@ -25,6 +34,13 @@ function loadGame() {
       state.revenuePerClick = parsed.revenuePerClick || 1;
       state.revenuePerSecond = parsed.revenuePerSecond || 0;
       state.prestigeLevel = parsed.prestigeLevel || 0;
+      state.totalBusinessesOwned = parsed.totalBusinessesOwned || 0;
+      
+      if (parsed.equipmentUpgrades) {
+        parsed.equipmentUpgrades.forEach((u, i) => {
+          if (state.equipmentUpgrades[i]) state.equipmentUpgrades[i].count = u.count;
+        });
+      }
       
       if (parsed.upgrades) {
         state.upgrades.forEach((u, i) => {
@@ -48,6 +64,8 @@ function saveGame() {
     revenuePerClick: state.revenuePerClick,
     revenuePerSecond: state.revenuePerSecond,
     prestigeLevel: state.prestigeLevel,
+    totalBusinessesOwned: state.totalBusinessesOwned,
+    equipmentUpgrades: state.equipmentUpgrades.map(u => ({ count: u.count })),
     upgrades: state.upgrades.map(u => ({ id: u.id, count: u.count, cost: u.cost })),
     totalCashEarned: state.totalCashEarned
   }));
@@ -67,6 +85,27 @@ function handleClick() {
   playSound('click');
 }
 
+function buyEquipment(index) {
+  const equip = state.equipmentUpgrades[index];
+  const prestigeMultiplier = 1 + (state.prestigeLevel * 0.5);
+  const discountedCost = Math.floor(equip.cost / prestigeMultiplier);
+  
+  if (state.cash >= discountedCost) {
+    state.cash -= discountedCost;
+    equip.count++;
+    
+    // Recalculate click power
+    calculateClickPower();
+    
+    // Increase cost by 20% each purchase
+    equip.cost = Math.floor(equip.cost * 1.2);
+    
+    addLog(`Bought ${equip.name}! Click power +${formatNumber(equip.clickBonus)}`);
+    saveGame();
+    updateUI();
+  }
+}
+
 function buyUpgrade(upgradeIndex) {
   const upgrade = state.upgrades[upgradeIndex];
   const prestigeMultiplier = 1 + (state.prestigeLevel * 0.5);
@@ -75,8 +114,9 @@ function buyUpgrade(upgradeIndex) {
   if (state.cash >= discountedCost) {
     state.cash -= discountedCost;
     upgrade.count++;
+    state.totalBusinessesOwned++;
     
-    // Calculate revenue multiplier from upgrades
+    // Recalculate RPS
     calculateRPS();
     
     // Increase cost by 15% each purchase
@@ -88,6 +128,14 @@ function buyUpgrade(upgradeIndex) {
   }
 }
 
+function calculateClickPower() {
+  let clickPower = state.equipmentUpgrades.reduce((total, u) => total + (u.clickBonus * u.count), 1);
+  
+  // Apply prestige multiplier to click power
+  const prestigeMultiplier = 1 + (state.prestigeLevel * 0.5);
+  state.revenuePerClick = Math.floor(clickPower * prestigeMultiplier);
+}
+
 function calculateRPS() {
   let rps = state.upgrades.reduce((total, u) => total + (u.revenue * u.count), 0);
   
@@ -96,25 +144,38 @@ function calculateRPS() {
   state.revenuePerSecond = Math.floor(rps * prestigeMultiplier);
 }
 
+function canPrestige() {
+  return state.totalCashEarned >= 500000 && state.prestigeLevel < 5;
+}
+
 function triggerPrestige() {
-  if (!confirm('Reset all progress for permanent bonuses? You will lose upgrades and cash.')) return;
+  if (!canPrestige()) return;
   
-  const prestigeBonus = 1; // +50% per level
-  const newLevel = state.prestigeLevel + prestigeBonus;
+  if (!confirm('Reset all progress for permanent bonuses? You will lose upgrades, cash, and equipment. This cannot be undone!')) return;
   
-  addLog(`🌟 Prestige! Level ${state.prestigeLevel} → ${newLevel}`);
+  const newLevel = Math.min(state.prestigeLevel + 1, 5);
+  
+  addLog(`🌟 PRESTIGE! Level ${state.prestigeLevel} → ${newLevel}`);
+  addLog(`   New multiplier: ${(1 + newLevel * 0.5)}x to all income`);
   
   state.prestigeLevel = newLevel;
   state.cash = 0;
-  state.revenuePerClick = 1; // Reset to base
-  state.totalCashEarned += state.cash; // Add current cash to total for prestige calc
+  state.revenuePerClick = 1; // Reset to base, will be recalculated
+  state.totalCashEarned = 0; // Reset total for next prestige threshold
+  state.totalBusinessesOwned = 0;
   
-  // Reset upgrades
+  // Reset all upgrades and equipment
+  state.equipmentUpgrades.forEach(u => {
+    u.count = 0;
+    u.cost = [25, 150, 750, 3000, 15000, 75000][state.equipmentUpgrades.indexOf(u)];
+  });
+  
   state.upgrades.forEach(u => {
     u.count = 0;
     u.cost = Math.floor(15 * Math.pow(1.15, parseInt(u.id.replace(/\D/g, '')) || 0));
   });
   
+  calculateClickPower();
   calculateRPS();
   saveGame();
   updateUI();
@@ -130,15 +191,42 @@ function formatNumber(num) {
 function updateUI() {
   document.getElementById('cash-display').textContent = formatNumber(state.cash);
   document.getElementById('rps-display').textContent = `${formatNumber(state.revenuePerSecond)}/s`;
+  document.getElementById('click-power-display').textContent = `Click: ${formatNumber(state.revenuePerClick)}`;
+  
+  // Update prestige info
+  const canAffordPrestige = canPrestige();
+  const prestigeBtn = document.getElementById('prestige-btn');
   
   if (state.prestigeLevel > 0) {
     document.getElementById('prestige-level').textContent = state.prestigeLevel;
     document.getElementById('prestige-display').classList.remove('hidden');
   }
   
-  // Update upgrade buttons
+  // Update equipment buttons
   const prestigeMultiplier = 1 + (state.prestigeLevel * 0.5);
   
+  state.equipmentUpgrades.forEach((equip, index) => {
+    const discountedCost = Math.floor(equip.cost / prestigeMultiplier);
+    const btn = document.getElementById(`equip-${index}`);
+    
+    if (btn) {
+      btn.innerHTML = `
+        <div class="upgrade-header">
+          <span class="upgrade-name">${equip.name}</span>
+          <span class="upgrade-cost">${formatNumber(discountedCost)}</span>
+        </div>
+        <div class="upgrade-stats">+${formatNumber(equip.clickBonus)} click × ${equip.count}</div>
+      `;
+      
+      if (state.cash >= discountedCost) {
+        btn.classList.remove('disabled');
+      } else {
+        btn.classList.add('disabled');
+      }
+    }
+  });
+  
+  // Update business upgrade buttons
   state.upgrades.forEach((upgrade, index) => {
     const discountedCost = Math.floor(upgrade.cost / prestigeMultiplier);
     const btn = document.getElementById(`upgrade-${index}`);
@@ -161,11 +249,16 @@ function updateUI() {
   });
   
   // Show/hide prestige button
-  const canPrestige = state.totalCashEarned >= 100000;
-  const prestigeBtn = document.getElementById('prestige-btn');
-  if (canPrestige) {
+  if (canAffordPrestige && state.prestigeLevel < 5) {
+    const nextBonus = (1 + (state.prestigeLevel + 1) * 0.5);
+    prestigeBtn.innerHTML = `🌟 Prestige → ${nextBonus}x multiplier`;
     prestigeBtn.classList.remove('hidden');
-    prestigeBtn.innerHTML = `🌟 Reset for +${(state.prestigeLevel + 0.5 * 100)}% bonus`;
+  } else if (state.prestigeLevel >= 5) {
+    prestigeBtn.textContent = 'Max Level Reached';
+    prestigeBtn.disabled = true;
+  } else {
+    prestigeBtn.innerHTML = 'Unlock at $500k earned';
+    prestigeBtn.classList.add('hidden');
   }
 }
 
@@ -245,8 +338,30 @@ setInterval(saveGame, 30000);
 // Initialize
 window.onload = () => {
   loadGame();
+  calculateClickPower();
   calculateRPS();
   
+  // Setup equipment upgrades UI
+  const equipContainer = document.getElementById('equipment-container');
+  state.equipmentUpgrades.forEach((equip, index) => {
+    const btn = document.createElement('button');
+    btn.id = `equip-${index}`;
+    btn.className = 'upgrade-card';
+    btn.onclick = () => buyEquipment(index);
+    
+    // Initial render
+    btn.innerHTML = `
+      <div class="upgrade-header">
+        <span class="upgrade-name">${equip.name}</span>
+        <span class="upgrade-cost">${formatNumber(equip.cost)}</span>
+      </div>
+      <div class="upgrade-stats">+${formatNumber(equip.clickBonus)} click × ${equip.count}</div>
+    `;
+    
+    equipContainer.appendChild(btn);
+  });
+  
+  // Setup business upgrades UI
   const upgradesContainer = document.getElementById('upgrades-container');
   
   state.upgrades.forEach((upgrade, index) => {
@@ -270,11 +385,23 @@ window.onload = () => {
   updateUI();
 };
 
-// Auto-buy upgrades (optional feature)
+// Auto-buy feature
 window.buyAllUpgrades = function() {
   const prestigeMultiplier = 1 + (state.prestigeLevel * 0.5);
   let changed = false;
   
+  // Buy equipment first
+  state.equipmentUpgrades.forEach((u, i) => {
+    while (state.cash >= Math.floor(u.cost / prestigeMultiplier)) {
+      state.cash -= Math.floor(u.cost / prestigeMultiplier);
+      u.count++;
+      calculateClickPower();
+      u.cost = Math.floor(u.cost * 1.2);
+      changed = true;
+    }
+  });
+  
+  // Then business upgrades
   state.upgrades.forEach((u, i) => {
     while (state.cash >= Math.floor(u.cost / prestigeMultiplier)) {
       state.cash -= Math.floor(u.cost / prestigeMultiplier);

@@ -47,6 +47,15 @@
   --card-bg: rgba(255, 255, 255, 0.1);
 }
 
+/* Theme: Gray */
+.theme-gray {
+  --bg-gradient: linear-gradient(135deg, #1f2937 0%, #374151 50%, #9ca3af 100%);
+  --primary-color: #d1d5db;
+  --secondary-color: #9ca3af;
+  --accent-color: #f3f4f6;
+  --card-bg: rgba(255, 255, 255, 0.08);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -223,6 +232,15 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.upgrade-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upgrade-card.disabled:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 .upgrade-header {
   display: flex;
   justify-content: space-between;
@@ -326,6 +344,21 @@ body {
 
 .cash-pop {
   animation: cashPop 0.3s ease;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px) scale(1.2);
+  }
+}
+
+.float-up-text {
+  animation: floatUp 1s ease-out forwards;
 }
 
 /* Scrollbar */
