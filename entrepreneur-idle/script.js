@@ -325,19 +325,11 @@ function playSound(type) {
 }
 
 // Game Loop
-let accumulatedRPS = 0;
 setInterval(() => {
   if (state.revenuePerSecond > 0) {
-    // Accumulate partial revenue (update every 100ms = 1/10th of a second)
-    accumulatedRPS += state.revenuePerSecond / 10;
-    
-    // Only add full dollars to cash
-    const cashToAdd = Math.floor(accumulatedRPS);
-    if (cashToAdd > 0) {
-      state.cash += cashToAdd;
-      accumulatedRPS -= cashToAdd;
-      updateUI();
-    }
+    // Add 1/10th of RPS every 100ms
+    state.cash += state.revenuePerSecond / 10;
+    updateUI();
   }
 }, 100);
 
