@@ -1,0 +1,342 @@
+:root {
+  /* Base vars (will be overridden by theme) */
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --primary-color: #f59e0b;
+  --secondary-color: #d97706;
+  --accent-color: #fef3c7;
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --btn-gradient: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  --success-color: #4ade80;
+}
+
+/* Theme: Sunset */
+.theme-sunset {
+  --bg-gradient: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #fffbe6 100%);
+  --primary-color: #fb923c;
+  --secondary-color: #f97316;
+  --accent-color: #fff7ed;
+  --card-bg: rgba(255, 255, 255, 0.15);
+}
+
+/* Theme: Ocean */
+.theme-ocean {
+  --bg-gradient: linear-gradient(135deg, #0c4a6e 0%, #075985 50%, #cffafe 100%);
+  --primary-color: #38bdf8;
+  --secondary-color: #0ea5e9;
+  --accent-color: #f0f9ff;
+  --card-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* Theme: Forest */
+.theme-forest {
+  --bg-gradient: linear-gradient(135deg, #064e3b 0%, #047857 50%, #d1fae5 100%);
+  --primary-color: #34d399;
+  --secondary-color: #10b981;
+  --accent-color: #ecfdf5;
+  --card-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* Theme: Neon */
+.theme-neon {
+  --bg-gradient: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #f5d0fe 100%);
+  --primary-color: #e879f9;
+  --secondary-color: #d8b4fe;
+  --accent-color: #faf5ff;
+  --card-bg: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Theme Bar */
+.theme-bar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 16px;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+}
+
+.theme-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+}
+
+.theme-btn:hover {
+  transform: scale(1.1);
+}
+
+.theme-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Header */
+.game-header {
+  text-align: center;
+  padding: 60px 20px 30px;
+}
+
+.game-header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+/* Main Container */
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 24px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .game-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Clicker Section */
+.clicker-section {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 32px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.cash-register {
+  width: 160px;
+  height: 140px;
+  margin: 0 auto 32px;
+  background: linear-gradient(135deg, #fff 0%, var(--accent-color) 100%);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cash-register:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
+}
+
+.cash-register:active {
+  transform: scale(0.96);
+}
+
+.register-label {
+  margin-top: 8px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 16px 24px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  font-family: monospace;
+}
+
+/* Upgrades Section */
+.upgrades-section h2 {
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.upgrades-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upgrade-card {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.upgrade-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.upgrade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.upgrade-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.upgrade-cost {
+  color: var(--secondary-color);
+  font-weight: 700;
+}
+
+.upgrade-stats {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Prestige Section */
+.prestige-section {
+  margin-top: 32px;
+  text-align: center;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-prestige {
+  background: linear-gradient(45deg, #a855f7, #7c3aed);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+}
+
+.btn-prestige:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.6);
+}
+
+.prestige-info {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Game Log */
+.game-log {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  padding: 24px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-log h3 {
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+#log-container {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.log-entry {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.prestige-badge {
+  background: linear-gradient(45deg, #a855f7, #7c3aed);
+  padding: 8px 16px;
+  border-radius: 50px;
+  margin-top: 16px;
+  display: inline-block;
+  font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes cashPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.cash-pop {
+  animation: cashPop 0.3s ease;
+}
+
+/* Scrollbar */
+#log-container::-webkit-scrollbar {
+  width: 6px;
+}
+#log-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+#log-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}

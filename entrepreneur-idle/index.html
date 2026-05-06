@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Empire Builder: Side Hustle Grind 🚀</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-sunset">
+  <!-- Theme Toggle -->
+  <div id="theme-selector" class="theme-bar">
+    <button onclick="switchTheme('sunset')" class="theme-btn active" data-theme="sunset">
+      🌇
+    </button>
+    <button onclick="switchTheme('ocean')" class="theme-btn" data-theme="ocean">
+      🌊
+    </button>
+    <button onclick="switchTheme('forest')" class="theme-btn" data-theme="forest">
+      🌲
+    </button>
+    <button onclick="switchTheme('neon')" class="theme-btn" data-theme="neon">
+      🌃
+    </button>
+  </div>
+
+  <!-- Header -->
+  <header class="game-header">
+    <h1>Empire Builder</h1>
+    <p class="subtitle">Side Hustle Grind Edition</p>
+    <div id="prestige-display" class="prestige-badge hidden">
+      🌟 Prestige Level: <span id="prestige-level">0</span>
+    </div>
+  </header>
+
+  <!-- Main Game Area -->
+  <main class="game-container">
+    <!-- Clicker Section -->
+    <section class="clicker-section">
+      <div class="cash-register" onclick="handleClick()">
+        <svg viewBox="0 0 64 64" width="80" height="80">
+          <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.15"/>
+          <path d="M20 20h24v8H20zM20 36h24v8H20z" fill="currentColor"/>
+          <circle cx="32" cy="24" r="4" fill="#fff"/>
+        </svg>
+        <p class="register-label">Click to Earn</p>
+      </div>
+
+      <!-- Stats Display -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Cash</span>
+          <span class="stat-value" id="cash-display">$0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Revenue/Sec</span>
+          <span class="stat-value" id="rps-display">$0/s</span>
+        </div>
+      </div>
+
+      <!-- Upgrade Section -->
+      <section class="upgrades-section">
+        <h2>Side Hustles</h2>
+        <div class="upgrades-list" id="upgrades-container">
+          <!-- Upgrades injected via JS -->
+        </div>
+      </section>
+
+      <!-- Prestige Button -->
+      <section class="prestige-section">
+        <button id="prestige-btn" class="btn-prestige hidden" onclick="triggerPrestige()">
+          🌟 Reset & Prestige
+        </button>
+        <p class="prestige-info">Reset progress for permanent bonuses</p>
+      </section>
+
+    </section>
+
+    <!-- Log Section -->
+    <aside class="game-log">
+      <h3>Activity Log</h3>
+      <div id="log-container"></div>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
