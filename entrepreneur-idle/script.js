@@ -1,3 +1,5 @@
+// Empire Builder - Side Hustle Grind
+// Version: 2.0.1 (Regal Theme + W/S Scroll)
 // Game State
 const state = {
   cash: 0,
