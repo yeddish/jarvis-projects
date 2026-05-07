@@ -9,23 +9,23 @@
 <body class="theme-regal">
   <!-- Theme Toggle -->
   <div id="theme-selector" class="theme-bar">
-    <button onclick="switchTheme('sunset')" class="theme-btn active" data-theme="sunset">🌅</button>
-    <button onclick="switchTheme('ocean')" class="theme-btn" data-theme="ocean">🌊</button>
-    <button onclick="switchTheme('forest')" class="theme-btn" data-theme="forest">🌲</button>
-    <button onclick="switchTheme('neon')" class="theme-btn" data-theme="neon">🌃</button>
-    <button onclick="switchTheme('gray')" class="theme-btn" data-theme="gray">⚪</button>
-    <button onclick="switchTheme('regal')" class="theme-btn active" data-theme="regal">
-      👑
-    </button>
+        <button onclick="switchTheme('sunset')" class="theme-btn active" data-theme="sunset">🌅</button>
+        <button onclick="switchTheme('ocean')" class="theme-btn" data-theme="ocean">🌊</button>
+        <button onclick="switchTheme('forest')" class="theme-btn" data-theme="forest">🌲</button>
+        <button onclick="switchTheme('neon')" class="theme-btn" data-theme="neon">🌃</button>
+        <button onclick="switchTheme('gray')" class="theme-btn" data-theme="gray">⚪</button>
+        <button onclick="switchTheme('regal')" class="theme-btn active" data-theme="regal">
+          <span style="font-size: 1.3rem;">👑</span>
+        </button>
   </div>
 
   <!-- Header -->
   <header class="game-header">
     <h1>Empire Builder</h1>
     <p class="subtitle">Side Hustle Grind Edition</p>
-    <div id="prestige-display" class="prestige-badge hidden">
-      🌟 Prestige Level: <span id="prestige-level">0</span>
-    </div>
+        <div id="prestige-display" class="prestige-badge hidden">
+          <span style="font-size: 1.2rem;">🌟</span> Prestige Level: <span id="prestige-level">0</span>
+        </div>
   </header>
 
   <!-- Main Game Area -->
@@ -33,7 +33,7 @@
     <!-- Clicker Section -->
     <section class="clicker-section">
       <div class="cash-register" onclick="handleClick()">
-        <svg viewBox="0 0 64 64" width="80" height="80">
+        <svg viewBox="0 0 64 64" width="80" height="80" style="color: var(--primary-color);">
           <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.15"/>
           <path d="M20 20h24v8H20zM20 36h24v8H20z" fill="currentColor"/>
           <circle cx="32" cy="24" r="4" fill="#fff"/>
@@ -43,15 +43,15 @@
 
       <!-- Stats Display -->
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" style="color: var(--primary-color);">
           <span class="stat-label">Cash</span>
           <span class="stat-value" id="cash-display">$0</span>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" style="color: var(--primary-color);">
           <span class="stat-label">Click Power</span>
           <span class="stat-value" id="click-power-display">$1/click</span>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" style="color: var(--success-color);">
           <span class="stat-label">Revenue/Sec</span>
           <span class="stat-value" id="rps-display">$0/s</span>
         </div>
@@ -60,7 +60,7 @@
       <!-- Equipment Upgrades -->
       <section class="upgrades-section">
         <h2>Equipment</h2>
-        <div class="upgrades-list" id="equipment-container">
+        <div class="upgrades-list" id="equipment-container" style="color: var(--primary-color);">
           <!-- Equipment injected via JS -->
         </div>
       </section>
@@ -68,7 +68,7 @@
       <!-- Business Side Hustles Section -->
       <section class="upgrades-section">
         <h2>Side Hustles</h2>
-        <div class="upgrades-list" id="upgrades-container">
+        <div class="upgrades-list" id="upgrades-container" style="color: var(--success-color);">
           <!-- Upgrades injected via JS -->
         </div>
       </section>
@@ -76,7 +76,7 @@
       <!-- Prestige Button -->
       <section class="prestige-section">
         <button id="prestige-btn" class="btn-prestige hidden" onclick="triggerPrestige()">
-          🌟 Prestige
+          <span style="font-size: 1.2rem;">🌟</span> Prestige
         </button>
         <p class="prestige-info">Unlock at $500k earned — permanent +50% multiplier</p>
       </section>
