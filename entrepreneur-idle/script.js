@@ -174,7 +174,10 @@ function triggerPrestige() {
   
   state.upgrades.forEach(u => {
     u.count = 0;
-    u.cost = Math.floor(15 * Math.pow(1.15, parseInt(u.id.replace(/\D/g, '')) || 0));
+    // Reset cost based on upgrade index (not ID parsing)
+    const baseCosts = [15, 100, 500, 2000, 10000, 50000];
+    const idx = state.upgrades.indexOf(u);
+    u.cost = baseCosts[idx] || 15;
   });
   
   calculateClickPower();
