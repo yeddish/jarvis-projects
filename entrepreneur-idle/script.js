@@ -1,5 +1,5 @@
 // Empire Builder - Side Hustle Grind
-// Version: 2.0.1 (Regal Theme + W/S Scroll)
+// Version: 2.1.0 (Fix icons, prestige button, increase side hustle pricing)
 // Game State
 const state = {
   cash: 0,
@@ -14,12 +14,12 @@ const state = {
     { id: 'ai_co_founder', name: 'AI Co-Founder', cost: 75000, clickBonus: 250, count: 0 }
   ],
   upgrades: [
-    { id: 'freelance', name: 'Freelance Gigs', cost: 15, revenue: 1, count: 0 },
-    { id: 'tutoring', name: 'Online Tutoring', cost: 100, revenue: 5, count: 0 },
-    { id: 'dropshipping', name: 'Dropshipping Store', cost: 500, revenue: 25, count: 0 },
-    { id: 'app', name: 'Mobile App', cost: 2000, revenue: 100, count: 0 },
-    { id: 'saas', name: 'SaaS Platform', cost: 10000, revenue: 500, count: 0 },
-    { id: 'agency', name: 'Digital Agency', cost: 50000, revenue: 2500, count: 0 }
+    { id: 'freelance', name: 'Freelance Gigs', cost: 75, revenue: 1, count: 0 },
+    { id: 'tutoring', name: 'Online Tutoring', cost: 300, revenue: 6, count: 0 },
+    { id: 'dropshipping', name: 'Dropshipping Store', cost: 1500, revenue: 28, count: 0 },
+    { id: 'app', name: 'Mobile App', cost: 6000, revenue: 130, count: 0 },
+    { id: 'saas', name: 'SaaS Platform', cost: 30000, revenue: 750, count: 0 },
+    { id: 'agency', name: 'Digital Agency', cost: 120000, revenue: 3200, count: 0 }
   ],
   prestigeLevel: 0,
   totalBusinessesOwned: 0,
@@ -153,7 +153,12 @@ function canPrestige() {
 function triggerPrestige() {
   if (!canPrestige()) return;
   
-  if (!confirm('Reset all progress for permanent bonuses? You will lose upgrades, cash, and equipment. This cannot be undone!')) return;
+  // Check if user really wants to prestige (they've earned enough before)
+  const hasEarnedBefore = state.totalCashEarned >= 500000;
+  if (!hasEarnedBefore && state.cash < 500000) {
+    alert('You need $500k in lifetime earnings to prestige! Keep grinding.');
+    return;
+  }
   
   const newLevel = Math.min(state.prestigeLevel + 1, 5);
   
@@ -161,9 +166,9 @@ function triggerPrestige() {
   addLog(`   New multiplier: ${(1 + newLevel * 0.5)}x to all income`);
   
   state.prestigeLevel = newLevel;
-  state.cash = 0;
+  state.cash = 100; // Give starter cash
   state.revenuePerClick = 1; // Reset to base, will be recalculated
-  state.totalCashEarned = 0; // Reset total for next prestige threshold
+  // NOTE: We keep totalCashEarned so they can prestige again after re-earning 500k
   state.totalBusinessesOwned = 0;
   
   // Reset all upgrades and equipment
@@ -174,10 +179,9 @@ function triggerPrestige() {
   
   state.upgrades.forEach(u => {
     u.count = 0;
-    // Reset cost based on upgrade index (not ID parsing)
-    const baseCosts = [15, 100, 500, 2000, 10000, 50000];
+    const baseCosts = [75, 300, 1500, 6000, 30000, 120000];
     const idx = state.upgrades.indexOf(u);
-    u.cost = baseCosts[idx] || 15;
+    u.cost = baseCosts[idx] || 75;
   });
   
   calculateClickPower();
@@ -258,11 +262,13 @@ function updateUI() {
     const nextBonus = (1 + (state.prestigeLevel + 1) * 0.5);
     prestigeBtn.innerHTML = `🌟 Prestige → ${nextBonus}x multiplier`;
     prestigeBtn.classList.remove('hidden');
+    prestigeBtn.disabled = false;
   } else if (state.prestigeLevel >= 5) {
-    prestigeBtn.textContent = 'Max Level Reached';
+    prestigeBtn.textContent = '🌟 Max Level Reached';
     prestigeBtn.disabled = true;
+    prestigeBtn.classList.remove('hidden');
   } else {
-    prestigeBtn.innerHTML = 'Unlock at $500k earned';
+    prestigeBtn.innerHTML = '<span style="font-size: 1.2rem;">🔒</span> Unlock at $500k lifetime earnings';
     prestigeBtn.classList.add('hidden');
   }
 }
