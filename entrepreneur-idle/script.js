@@ -418,3 +418,22 @@ window.buyAllUpgrades = function() {
     updateUI();
   }
 };
+
+// Keyboard shortcuts for scrolling
+window.addEventListener('keydown', (e) => {
+  const logContainer = document.getElementById('log-container');
+  
+  if (!logContainer) return;
+  
+  // W key - scroll up
+  if (e.key === 'w' || e.key === 'W') {
+    logContainer.scrollTop -= 60;
+    e.preventDefault();
+  }
+  
+  // S key - scroll down
+  if (e.key === 's' || e.key === 'S') {
+    logContainer.scrollTop += 60;
+    e.preventDefault();
+  }
+});
