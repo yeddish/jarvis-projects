@@ -1,59 +1,80 @@
-// Empire Builder - Side Hustle Grind
-// Version: 2.1.0 (Fix icons, prestige button, increase side hustle pricing)
+// Empire Builder - Special Chewy Edition
+// Version: 3.0.0 (Chewy Theme + Sweet Upgrades)
+const SAVE_KEY = 'chewyEmpireBuilderSave';
+const THEME_KEY = 'empireBuilderTheme';
+const MAX_OFFLINE_SECONDS = 60 * 60 * 24 * 7; // Cap offline gains at 7 days.
+
+// Candy-themed equipment upgrades
+const BASE_EQUIPMENT_UPGRADES = [
+  { id: 'stick_lollipop', name: 'Stick Lollipop', cost: 25, clickBonus: 2, count: 0 },
+  { id: 'gummy_power_bank', name: 'Gummy Power Bank', cost: 150, clickBonus: 5, count: 0 },
+  { id: 'candy_cane_crm', name: 'Candy Cane CRM', cost: 750, clickBonus: 12, count: 0 },
+  { id: 'chocolate_v assistant', name: 'Chocolate VA Assistant', cost: 3000, clickBonus: 30, count: 0 },
+  { id: 'cotton_automation', name: 'Cotton Candy Auto-Tool Suite', cost: 15000, clickBonus: 80, count: 0 },
+  { id: 'licorice_ai_co_founder', name: 'Licorice AI Co-Founder', cost: 75000, clickBonus: 250, count: 0 }
+];
+
+// Sweet side hustle upgrades
+const BASE_UPGRADES = [
+  { id: 'candy_sales', name: 'Candy Sales Booth', cost: 75, revenue: 1, count: 0 },
+  { id: 'boba_tutoring', name: 'Boba Tutoring', cost: 300, revenue: 6, count: 0 },
+  { id: 'sweets_dropshipping', name: 'Sweet Dropshipping Store', cost: 1500, revenue: 28, count: 0 },
+  { id: 'gummy_app', name: 'Gummy Mobile App', cost: 6000, revenue: 130, count: 0 },
+  { id: 'chocolate_saaS', name: 'Chocolate SaaS Platform', cost: 30000, revenue: 750, count: 0 },
+  { id: 'candy_agency', name: 'Candy Shoppe Agency', cost: 120000, revenue: 3200, count: 0 }
+];
+
+function cloneBaseItems(items) {
+  return items.map(item => ({ ...item }));
+}
+
 // Game State
 const state = {
   cash: 0,
   revenuePerClick: 1,
   revenuePerSecond: 0,
-  equipmentUpgrades: [
-    { id: 'basic_laptop', name: 'Basic Laptop', cost: 25, clickBonus: 2, count: 0 },
-    { id: 'power_bank', name: 'Power Bank', cost: 150, clickBonus: 5, count: 0 },
-    { id: 'crm_software', name: 'CRM Software', cost: 750, clickBonus: 12, count: 0 },
-    { id: 'virtual_assistant', name: 'VA Assistant', cost: 3000, clickBonus: 30, count: 0 },
-    { id: 'automation_tool', name: 'Auto-Tool Suite', cost: 15000, clickBonus: 80, count: 0 },
-    { id: 'ai_co_founder', name: 'AI Co-Founder', cost: 75000, clickBonus: 250, count: 0 }
-  ],
-  upgrades: [
-    { id: 'freelance', name: 'Freelance Gigs', cost: 75, revenue: 1, count: 0 },
-    { id: 'tutoring', name: 'Online Tutoring', cost: 300, revenue: 6, count: 0 },
-    { id: 'dropshipping', name: 'Dropshipping Store', cost: 1500, revenue: 28, count: 0 },
-    { id: 'app', name: 'Mobile App', cost: 6000, revenue: 130, count: 0 },
-    { id: 'saas', name: 'SaaS Platform', cost: 30000, revenue: 750, count: 0 },
-    { id: 'agency', name: 'Digital Agency', cost: 120000, revenue: 3200, count: 0 }
-  ],
+  equipmentUpgrades: cloneBaseItems(BASE_EQUIPMENT_UPGRADES),
+  upgrades: cloneBaseItems(BASE_UPGRADES),
   prestigeLevel: 0,
   totalBusinessesOwned: 0,
-  totalCashEarned: 0
+  totalCashEarned: 0,
+  lastSavedAt: Date.now()
 };
 
 // Load saved game
 function loadGame() {
-  const saved = localStorage.getItem('empireBuilderSave');
+  const saved = localStorage.getItem(SAVE_KEY);
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
       state.cash = parsed.cash || 0;
-      state.revenuePerClick = parsed.revenuePerClick || 1;
-      state.revenuePerSecond = parsed.revenuePerSecond || 0;
       state.prestigeLevel = parsed.prestigeLevel || 0;
       state.totalBusinessesOwned = parsed.totalBusinessesOwned || 0;
       
       if (parsed.equipmentUpgrades) {
         parsed.equipmentUpgrades.forEach((u, i) => {
-          if (state.equipmentUpgrades[i]) state.equipmentUpgrades[i].count = u.count;
+          if (state.equipmentUpgrades[i]) {
+            state.equipmentUpgrades[i].count = Number(u.count) || 0;
+            state.equipmentUpgrades[i].cost = Number.isFinite(u.cost)
+              ? Math.floor(u.cost)
+              : calculateScaledCost(BASE_EQUIPMENT_UPGRADES[i].cost, state.equipmentUpgrades[i].count, 1.2);
+          }
         });
       }
       
       if (parsed.upgrades) {
         state.upgrades.forEach((u, i) => {
           if (parsed.upgrades[i]) {
-            u.count = parsed.upgrades[i].count;
-            u.cost = Math.floor(parsed.upgrades[i].cost);
+            u.count = Number(parsed.upgrades[i].count) || 0;
+            u.cost = Number.isFinite(parsed.upgrades[i].cost)
+              ? Math.floor(parsed.upgrades[i].cost)
+              : calculateScaledCost(BASE_UPGRADES[i].cost, u.count, 1.15);
           }
         });
       }
       
       state.totalCashEarned = parsed.totalCashEarned || 0;
+      state.lastSavedAt = parsed.lastSavedAt || Date.now();
     } catch (e) {
       console.error('Save file corrupted, resetting');
     }
@@ -61,29 +82,55 @@ function loadGame() {
 }
 
 function saveGame() {
-  localStorage.setItem('empireBuilderSave', JSON.stringify({
+  state.lastSavedAt = Date.now();
+  localStorage.setItem(SAVE_KEY, JSON.stringify({
     cash: state.cash,
     revenuePerClick: state.revenuePerClick,
     revenuePerSecond: state.revenuePerSecond,
     prestigeLevel: state.prestigeLevel,
     totalBusinessesOwned: state.totalBusinessesOwned,
-    equipmentUpgrades: state.equipmentUpgrades.map(u => ({ count: u.count })),
+    equipmentUpgrades: state.equipmentUpgrades.map(u => ({ id: u.id, count: u.count, cost: u.cost })),
     upgrades: state.upgrades.map(u => ({ id: u.id, count: u.count, cost: u.cost })),
-    totalCashEarned: state.totalCashEarned
+    totalCashEarned: state.totalCashEarned,
+    lastSavedAt: state.lastSavedAt
   }));
 }
 
+function calculateScaledCost(baseCost, count, multiplier) {
+  let cost = baseCost;
+  for (let i = 0; i < count; i++) {
+    cost = Math.floor(cost * multiplier);
+  }
+  return cost;
+}
+
+function applyOfflineProgress() {
+  if (!state.lastSavedAt || state.revenuePerSecond <= 0) return;
+
+  const elapsedSeconds = Math.min(
+    Math.floor((Date.now() - state.lastSavedAt) / 1000),
+    MAX_OFFLINE_SECONDS
+  );
+
+  if (elapsedSeconds < 10) return;
+
+  const offlineEarnings = Math.floor(state.revenuePerSecond * elapsedSeconds);
+  if (offlineEarnings <= 0) return;
+
+  state.cash += offlineEarnings;
+  state.totalCashEarned += offlineEarnings;
+  addLog(`💤 Offline earnings: ${formatNumber(offlineEarnings)} over ${formatDuration(elapsedSeconds)}`);
+}
+
 // Core Mechanics
-function handleClick() {
-  const baseClickValue = state.revenuePerClick;
-  const prestigeMultiplier = 1 + (state.prestigeLevel * 0.5);
-  const earnings = Math.floor(baseClickValue * prestigeMultiplier);
+function handleClick(clickEvent) {
+  const earnings = state.revenuePerClick;
   
   state.cash += earnings;
   state.totalCashEarned += earnings;
   
   updateUI();
-  createFloatingText(earnings);
+  createFloatingText(earnings, clickEvent);
   playSound('click');
 }
 
@@ -153,16 +200,9 @@ function canPrestige() {
 function triggerPrestige() {
   if (!canPrestige()) return;
   
-  // Check if user really wants to prestige (they've earned enough before)
-  const hasEarnedBefore = state.totalCashEarned >= 500000;
-  if (!hasEarnedBefore && state.cash < 500000) {
-    alert('You need $500k in lifetime earnings to prestige! Keep grinding.');
-    return;
-  }
-  
   const newLevel = Math.min(state.prestigeLevel + 1, 5);
   
-  addLog(`🌟 PRESTIGE! Level ${state.prestigeLevel} → ${newLevel}`);
+  addLog(`🍭 PRESTIGE! Level ${state.prestigeLevel} → ${newLevel}`);
   addLog(`   New multiplier: ${(1 + newLevel * 0.5)}x to all income`);
   
   state.prestigeLevel = newLevel;
@@ -172,16 +212,14 @@ function triggerPrestige() {
   state.totalBusinessesOwned = 0;
   
   // Reset all upgrades and equipment
-  state.equipmentUpgrades.forEach(u => {
+  state.equipmentUpgrades.forEach((u, index) => {
     u.count = 0;
-    u.cost = [25, 150, 750, 3000, 15000, 75000][state.equipmentUpgrades.indexOf(u)];
+    u.cost = BASE_EQUIPMENT_UPGRADES[index].cost;
   });
   
-  state.upgrades.forEach(u => {
+  state.upgrades.forEach((u, index) => {
     u.count = 0;
-    const baseCosts = [75, 300, 1500, 6000, 30000, 120000];
-    const idx = state.upgrades.indexOf(u);
-    u.cost = baseCosts[idx] || 75;
+    u.cost = BASE_UPGRADES[index].cost;
   });
   
   calculateClickPower();
@@ -195,6 +233,16 @@ function formatNumber(num) {
   if (num >= 1000000) return `$${(num / 1000000).toFixed(2)}M`;
   if (num >= 1000) return `$${(num / 1000).toFixed(1)}k`;
   return `$${Math.floor(num)}`;
+}
+
+function formatDuration(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  if (minutes > 0) return `${minutes}m ${seconds}s`;
+  return `${seconds}s`;
 }
 
 function updateUI() {
@@ -260,11 +308,11 @@ function updateUI() {
   // Show/hide prestige button
   if (canAffordPrestige && state.prestigeLevel < 5) {
     const nextBonus = (1 + (state.prestigeLevel + 1) * 0.5);
-    prestigeBtn.innerHTML = `🌟 Prestige → ${nextBonus}x multiplier`;
+    prestigeBtn.innerHTML = `🍭 PRESTIGE → ${nextBonus}x multiplier`;
     prestigeBtn.classList.remove('hidden');
     prestigeBtn.disabled = false;
   } else if (state.prestigeLevel >= 5) {
-    prestigeBtn.textContent = '🌟 Max Level Reached';
+    prestigeBtn.textContent = '🍭 Max Level Reached';
     prestigeBtn.disabled = true;
     prestigeBtn.classList.remove('hidden');
   } else {
@@ -287,12 +335,14 @@ function addLog(message) {
   }
 }
 
-function createFloatingText(amount) {
+function createFloatingText(amount, clickEvent) {
+  if (!clickEvent) return;
+
   const float = document.createElement('div');
   float.textContent = `+$${amount}`;
   float.style.position = 'fixed';
-  float.style.left = `${event.clientX}px`;
-  float.style.top = `${event.clientY - 20}px`;
+  float.style.left = `${clickEvent.clientX}px`;
+  float.style.top = `${clickEvent.clientY - 20}px`;
   float.style.color = '#fff';
   float.style.fontWeight = 'bold';
   float.style.fontSize = '1.5rem';
@@ -307,6 +357,7 @@ function createFloatingText(amount) {
 // Theme Switching
 function switchTheme(theme) {
   document.body.className = `theme-${theme}`;
+  localStorage.setItem(THEME_KEY, theme);
   
   // Update active button state
   document.querySelectorAll('.theme-btn').forEach(btn => {
@@ -314,9 +365,18 @@ function switchTheme(theme) {
   });
 }
 
+function loadTheme() {
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'chewy';
+  switchTheme(savedTheme);
+}
+
 // Sound effects (simple oscillator)
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx;
 function playSound(type) {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  if (!audioCtx) audioCtx = new AudioContextClass();
   if (audioCtx.state === 'suspended') audioCtx.resume();
   
   const osc = audioCtx.createOscillator();
@@ -339,7 +399,9 @@ function playSound(type) {
 setInterval(() => {
   if (state.revenuePerSecond > 0) {
     // Add 1/10th of RPS every 100ms
-    state.cash += state.revenuePerSecond / 10;
+    const earnings = state.revenuePerSecond / 10;
+    state.cash += earnings;
+    state.totalCashEarned += earnings;
     updateUI();
   }
 }, 100);
@@ -349,9 +411,11 @@ setInterval(saveGame, 30000);
 
 // Initialize
 window.onload = () => {
+  loadTheme();
   loadGame();
   calculateClickPower();
   calculateRPS();
+  applyOfflineProgress();
   
   // Setup equipment upgrades UI
   const equipContainer = document.getElementById('equipment-container');
@@ -395,6 +459,7 @@ window.onload = () => {
   });
   
   updateUI();
+  saveGame();
 };
 
 // Auto-buy feature
@@ -418,6 +483,7 @@ window.buyAllUpgrades = function() {
     while (state.cash >= Math.floor(u.cost / prestigeMultiplier)) {
       state.cash -= Math.floor(u.cost / prestigeMultiplier);
       u.count++;
+      state.totalBusinessesOwned++;
       calculateRPS();
       u.cost = Math.floor(u.cost * 1.15);
       changed = true;
@@ -425,10 +491,22 @@ window.buyAllUpgrades = function() {
   });
   
   if (changed) {
+    calculateClickPower();
+    calculateRPS();
     addLog('🛒 Auto-purchased all affordable upgrades!');
+    saveGame();
     updateUI();
   }
 };
+
+function resetSave() {
+  const confirmed = confirm('Reset your Empire Builder save and start over? This cannot be undone.');
+  if (!confirmed) return;
+
+  localStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem(THEME_KEY);
+  window.location.reload();
+}
 
 // Keyboard shortcuts for scrolling
 window.addEventListener('keydown', (e) => {

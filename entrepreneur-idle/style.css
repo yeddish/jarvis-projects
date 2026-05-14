@@ -1,18 +1,27 @@
 /* Empire Builder - Side Hustle Grind
-   Version: 2.0.1 (Regal Theme + W/S Scroll)
-   Regal theme with gold accents, deep maroon background */
+   Version: 3.0.0 (Special Chewy Edition)
+   Chewy theme with candy colors, sweet side hustles, and chewy branding */
 
 :root {
   /* Base vars (will be overridden by theme) */
   --bg-gradient: linear-gradient(135deg, #2c0e0e 0%, #1a0808 100%);
-  --primary-color: #d4af37;
-  --secondary-color: #aa8c2c;
-  --accent-color: #fceeb5;
+  --primary-color: #ff69b4; /* Hot pink for chewy theme */
+  --secondary-color: #ff1493; /* Deep pink */
+  --accent-color: #ffb6c1; /* Light pink */
   --card-bg: rgba(0, 0, 0, 0.6);
   --text-primary: #ffffff;
-  --text-secondary: #e0d5b0;
+  --text-secondary: #ffd1dc;
   --btn-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  --success-color: #4ade80;
+  --success-color: #ff69b4;
+}
+
+/* Theme: Chewy (Default for Special Edition) */
+.theme-chewy {
+  --bg-gradient: linear-gradient(135deg, #ff69b4 0%, #ff1493 50%, #ffc0cb 100%);
+  --primary-color: #ff69b4;
+  --secondary-color: #ff1493;
+  --accent-color: #ffb6c1;
+  --card-bg: rgba(255, 255, 255, 0.2);
 }
 
 /* Theme: Sunset */
@@ -84,6 +93,28 @@ body {
   line-height: 1.6;
 }
 
+/* Chewy Banner */
+.chewy-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  background: linear-gradient(90deg, #ff69b4, #ff1493, #ff69b4);
+  color: white;
+  padding: 8px 24px;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  animation: chewyPulse 3s ease-in-out infinite;
+}
+
+@keyframes chewyPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.05); box-shadow: 0 6px 30px rgba(255, 105, 180, 0.6); }
+}
+
 /* Theme Bar */
 .theme-bar {
   position: fixed;
@@ -131,11 +162,17 @@ body {
 }
 
 .game-header h1 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   color: var(--primary-color);
-  text-shadow: 0 0 10px var(--secondary-color), 0 0 20px rgba(0,0,0,0.8);
-  margin-bottom: 8px;
-  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 0 25px rgba(255, 20, 147, 0.4);
+  margin-bottom: 12px;
+  letter-spacing: 3px;
+  animation: chewyGlow 3s ease-in-out infinite;
+}
+
+@keyframes chewyGlow {
+  0%, 100% { text-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 0 25px rgba(255, 20, 147, 0.4); }
+  50% { text-shadow: 0 0 25px rgba(255, 105, 180, 0.8), 0 0 35px rgba(255, 20, 147, 0.6); }
 }
 
 .subtitle {
@@ -145,13 +182,13 @@ body {
 }
 
 #prestige-display {
-  background: linear-gradient(45deg, #a855f7, #7c3aed);
-  padding: 8px 16px;
+  background: linear-gradient(45deg, #ff69b4, #ff1493);
+  padding: 10px 20px;
   border-radius: 50px;
   margin-top: 16px;
   display: inline-block;
   font-size: 0.9rem;
-  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 /* Main Game Area */
@@ -166,14 +203,15 @@ body {
   border-radius: 24px;
   padding: 32px;
   backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255,105,180,0.3);
 }
 
 .cash-register {
   width: 160px;
   height: 140px;
   margin: 0 auto 32px;
-  background: linear-gradient(135deg, #fff 0%, var(--accent-color) 100%);
+  background: linear-gradient(135deg, #fff 0%, #ffb6c1 100%);
+  border: none;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -184,6 +222,16 @@ body {
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255,255,255,0.3);
+  border: 2px solid var(--primary-color);
+}
+
+.cash-register:focus-visible,
+.theme-btn:focus-visible,
+.upgrade-card:focus-visible,
+.btn-prestige:focus-visible,
+.btn-reset:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 4px;
 }
 
 .cash-register:hover {
@@ -221,23 +269,23 @@ body {
 }
 
 .stat-card {
-  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
   border-radius: 16px;
   padding: 20px;
   text-align: center;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid var(--primary-color);
   transition: all 0.3s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  border-color: var(--primary-color);
+  box-shadow: 0 8px 24px rgba(255, 105, 180, 0.3);
+  border-color: var(--secondary-color);
 }
 
 .stat-label {
   display: block;
-  color: var(--text-secondary);
+  color: #ff69b4;
   font-size: 0.9rem;
   margin-bottom: 12px;
   letter-spacing: 1px;
@@ -248,7 +296,7 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-color);
-  text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  text-shadow: 0 0 8px rgba(255, 105, 180, 0.6), 0 0 16px rgba(255, 105, 180, 0.4);
 }
 
 /* Equipment Upgrades Section */
@@ -261,7 +309,7 @@ body {
   font-size: 1.4rem;
   margin-bottom: 20px;
   padding-bottom: 12px;
-  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+  border-bottom: 2px solid rgba(255, 105, 180, 0.3);
   letter-spacing: 1px;
 }
 
@@ -272,16 +320,16 @@ body {
 }
 
 .upgrade-card {
-  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
   border-radius: 12px;
   padding: 16px;
   transition: all 0.3s ease;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid var(--primary-color);
 }
 
 .upgrade-card:hover {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
-  border-color: var(--primary-color);
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.15), rgba(255, 105, 180, 0.05));
+  border-color: var(--secondary-color);
   transform: translateX(4px);
 }
 
@@ -291,7 +339,7 @@ body {
 }
 
 .upgrade-card.disabled:hover {
-  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
   transform: none;
 }
 
@@ -311,7 +359,7 @@ body {
 .upgrade-cost {
   color: var(--primary-color);
   font-weight: 700;
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(255, 105, 180, 0.15);
   padding: 4px 12px;
   border-radius: 8px;
 }
@@ -327,11 +375,11 @@ body {
   margin-top: 32px;
   text-align: center;
   padding-top: 24px;
-  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  border-top: 1px solid rgba(255, 105, 180, 0.3);
 }
 
 .btn-prestige {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: linear-gradient(135deg, #ff69b4, #ff1493);
   color: white;
   border: none;
   padding: 16px 48px;
@@ -340,13 +388,13 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 105, 180, 0.6);
   letter-spacing: 1px;
 }
 
 .btn-prestige:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.6);
+  box-shadow: 0 8px 30px rgba(255, 105, 180, 0.7);
 }
 
 .prestige-info {
@@ -356,6 +404,22 @@ body {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.btn-reset {
+  margin-top: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reset:hover {
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 20, 147, 0.1));
+  border-color: var(--primary-color);
 }
 
 /* Game Log */
@@ -387,11 +451,11 @@ body {
 
 .log-entry {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #ffd1dc;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 105, 180, 0.05));
   border-radius: 8px;
-  border-left: 3px solid var(--primary-color);
+  border-left: 4px solid var(--primary-color);
 }
 
 .log-entry:first-child {
@@ -444,6 +508,8 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .chewy-banner { font-size: 0.9rem; padding: 6px 16px; }
+  
   .game-header h1 { font-size: 2rem; }
   
   .stats-grid {
