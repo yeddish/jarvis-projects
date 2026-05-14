@@ -1,21 +1,29 @@
 /* Empire Builder - Side Hustle Grind
-   Version: 3.0.0 (Special Chewy Edition)
-   Chewy theme with candy colors, sweet side hustles, and chewy branding */
+   Version: 3.0.1 (Chewy Theme Added as Option) */
 
 :root {
-  /* Base vars (will be overridden by theme) */
-  --bg-gradient: linear-gradient(135deg, #2c0e0e 0%, #1a0808 100%);
-  --primary-color: #ff69b4; /* Hot pink for chewy theme */
-  --secondary-color: #ff1493; /* Deep pink */
-  --accent-color: #ffb6c1; /* Light pink */
+  /* Base vars - Regal Theme (Default) */
+  --bg-gradient: linear-gradient(135deg, #2c0e0e 0%, #1a0808 50%, #1f120b 100%);
+  --primary-color: #d4af37;
+  --secondary-color: #aa8c2c;
+  --accent-color: #fceeb5;
   --card-bg: rgba(0, 0, 0, 0.6);
   --text-primary: #ffffff;
-  --text-secondary: #ffd1dc;
+  --text-secondary: #e0d5b0;
   --btn-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  --success-color: #ff69b4;
+  --success-color: #4ade80;
 }
 
-/* Theme: Chewy (Default for Special Edition) */
+/* Theme: Regal (Default) */
+.theme-regal {
+  --bg-gradient: linear-gradient(135deg, #2c0e0e 0%, #1a0808 50%, #1f120b 100%);
+  --primary-color: #d4af37;
+  --secondary-color: #aa8c2c;
+  --accent-color: #fceeb5;
+  --card-bg: rgba(0, 0, 0, 0.6);
+}
+
+/* Theme: Chewy */
 .theme-chewy {
   --bg-gradient: linear-gradient(135deg, #ff69b4 0%, #ff1493 50%, #ffc0cb 100%);
   --primary-color: #ff69b4;
@@ -69,15 +77,6 @@
   --card-bg: rgba(0, 0, 0, 0.4);
 }
 
-/* Regal Theme (Default for Empire Builder) */
-.theme-regal {
-  --bg-gradient: linear-gradient(135deg, #2c0e0e 0%, #1a0808 50%, #1f120b 100%);
-  --primary-color: #d4af37;
-  --secondary-color: #aa8c2c;
-  --accent-color: #fceeb5;
-  --card-bg: rgba(0, 0, 0, 0.6);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -91,28 +90,6 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.6;
-}
-
-/* Chewy Banner */
-.chewy-banner {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1001;
-  background: linear-gradient(90deg, #ff69b4, #ff1493, #ff69b4);
-  color: white;
-  padding: 8px 24px;
-  border-radius: 50px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  font-weight: bold;
-  animation: chewyPulse 3s ease-in-out infinite;
-}
-
-@keyframes chewyPulse {
-  0%, 100% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.05); box-shadow: 0 6px 30px rgba(255, 105, 180, 0.6); }
 }
 
 /* Theme Bar */
@@ -162,17 +139,11 @@ body {
 }
 
 .game-header h1 {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   color: var(--primary-color);
-  text-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 0 25px rgba(255, 20, 147, 0.4);
-  margin-bottom: 12px;
-  letter-spacing: 3px;
-  animation: chewyGlow 3s ease-in-out infinite;
-}
-
-@keyframes chewyGlow {
-  0%, 100% { text-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 0 25px rgba(255, 20, 147, 0.4); }
-  50% { text-shadow: 0 0 25px rgba(255, 105, 180, 0.8), 0 0 35px rgba(255, 20, 147, 0.6); }
+  text-shadow: 0 0 10px var(--secondary-color), 0 0 20px rgba(0,0,0,0.8);
+  margin-bottom: 8px;
+  letter-spacing: 2px;
 }
 
 .subtitle {
@@ -182,13 +153,13 @@ body {
 }
 
 #prestige-display {
-  background: linear-gradient(45deg, #ff69b4, #ff1493);
-  padding: 10px 20px;
+  background: linear-gradient(45deg, #a855f7, #7c3aed);
+  padding: 8px 16px;
   border-radius: 50px;
   margin-top: 16px;
   display: inline-block;
   font-size: 0.9rem;
-  box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
 }
 
 /* Main Game Area */
@@ -203,14 +174,14 @@ body {
   border-radius: 24px;
   padding: 32px;
   backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255,105,180,0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(0,0,0,0.3);
 }
 
 .cash-register {
   width: 160px;
   height: 140px;
   margin: 0 auto 32px;
-  background: linear-gradient(135deg, #fff 0%, #ffb6c1 100%);
+  background: linear-gradient(135deg, #fff 0%, var(--accent-color) 100%);
   border: none;
   border-radius: 20px;
   display: flex;
@@ -222,7 +193,6 @@ body {
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255,255,255,0.3);
-  border: 2px solid var(--primary-color);
 }
 
 .cash-register:focus-visible,
@@ -269,23 +239,23 @@ body {
 }
 
 .stat-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
   border-radius: 16px;
   padding: 20px;
   text-align: center;
-  border: 1px solid var(--primary-color);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   transition: all 0.3s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(255, 105, 180, 0.3);
-  border-color: var(--secondary-color);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  border-color: var(--primary-color);
 }
 
 .stat-label {
   display: block;
-  color: #ff69b4;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 12px;
   letter-spacing: 1px;
@@ -296,7 +266,7 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-color);
-  text-shadow: 0 0 8px rgba(255, 105, 180, 0.6), 0 0 16px rgba(255, 105, 180, 0.4);
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
 }
 
 /* Equipment Upgrades Section */
@@ -309,7 +279,7 @@ body {
   font-size: 1.4rem;
   margin-bottom: 20px;
   padding-bottom: 12px;
-  border-bottom: 2px solid rgba(255, 105, 180, 0.3);
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
   letter-spacing: 1px;
 }
 
@@ -320,16 +290,16 @@ body {
 }
 
 .upgrade-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
   border-radius: 12px;
   padding: 16px;
   transition: all 0.3s ease;
-  border: 1px solid var(--primary-color);
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .upgrade-card:hover {
-  background: linear-gradient(135deg, rgba(255, 105, 180, 0.15), rgba(255, 105, 180, 0.05));
-  border-color: var(--secondary-color);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+  border-color: var(--primary-color);
   transform: translateX(4px);
 }
 
@@ -339,7 +309,7 @@ body {
 }
 
 .upgrade-card.disabled:hover {
-  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
   transform: none;
 }
 
@@ -359,7 +329,7 @@ body {
 .upgrade-cost {
   color: var(--primary-color);
   font-weight: 700;
-  background: rgba(255, 105, 180, 0.15);
+  background: rgba(212, 175, 55, 0.1);
   padding: 4px 12px;
   border-radius: 8px;
 }
@@ -375,11 +345,11 @@ body {
   margin-top: 32px;
   text-align: center;
   padding-top: 24px;
-  border-top: 1px solid rgba(255, 105, 180, 0.3);
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .btn-prestige {
-  background: linear-gradient(135deg, #ff69b4, #ff1493);
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
   color: white;
   border: none;
   padding: 16px 48px;
@@ -388,13 +358,13 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(255, 105, 180, 0.6);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
   letter-spacing: 1px;
 }
 
 .btn-prestige:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 30px rgba(255, 105, 180, 0.7);
+  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.6);
 }
 
 .prestige-info {
@@ -418,8 +388,8 @@ body {
 }
 
 .btn-reset:hover {
-  background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 20, 147, 0.1));
-  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-primary);
 }
 
 /* Game Log */
@@ -451,11 +421,11 @@ body {
 
 .log-entry {
   font-size: 0.9rem;
-  color: #ffd1dc;
+  color: var(--text-secondary);
   padding: 8px 12px;
-  background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 105, 180, 0.05));
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 8px;
-  border-left: 4px solid var(--primary-color);
+  border-left: 3px solid var(--primary-color);
 }
 
 .log-entry:first-child {
@@ -508,8 +478,6 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .chewy-banner { font-size: 0.9rem; padding: 6px 16px; }
-  
   .game-header h1 { font-size: 2rem; }
   
   .stats-grid {
@@ -517,4 +485,32 @@ body {
   }
   
   .cash-register { width: 140px; height: 120px; }
+}
+
+/* Chewy Theme Specific Styles */
+.theme-chewy .game-header h1 {
+  color: var(--primary-color);
+  text-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 0 25px rgba(255, 20, 147, 0.4);
+}
+
+.theme-chewy .stat-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  border-color: var(--primary-color);
+}
+
+.theme-chewy .stat-card:hover {
+  box-shadow: 0 8px 24px rgba(255, 105, 180, 0.3);
+}
+
+.theme-chewy .upgrade-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  border-color: var(--primary-color);
+}
+
+.theme-chewy .upgrade-card:hover {
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.15), rgba(255, 105, 180, 0.05));
+}
+
+.theme-chewy .upgrade-cost {
+  background: rgba(255, 105, 180, 0.15);
 }

@@ -1,27 +1,25 @@
-// Empire Builder - Special Chewy Edition
-// Version: 3.0.0 (Chewy Theme + Sweet Upgrades)
-const SAVE_KEY = 'chewyEmpireBuilderSave';
+// Empire Builder - Side Hustle Grind
+// Version: 3.0.1 (Chewy Theme Added - Optional)
+const SAVE_KEY = 'empireBuilderSave';
 const THEME_KEY = 'empireBuilderTheme';
 const MAX_OFFLINE_SECONDS = 60 * 60 * 24 * 7; // Cap offline gains at 7 days.
 
-// Candy-themed equipment upgrades
 const BASE_EQUIPMENT_UPGRADES = [
-  { id: 'stick_lollipop', name: 'Stick Lollipop', cost: 25, clickBonus: 2, count: 0 },
-  { id: 'gummy_power_bank', name: 'Gummy Power Bank', cost: 150, clickBonus: 5, count: 0 },
-  { id: 'candy_cane_crm', name: 'Candy Cane CRM', cost: 750, clickBonus: 12, count: 0 },
-  { id: 'chocolate_v assistant', name: 'Chocolate VA Assistant', cost: 3000, clickBonus: 30, count: 0 },
-  { id: 'cotton_automation', name: 'Cotton Candy Auto-Tool Suite', cost: 15000, clickBonus: 80, count: 0 },
-  { id: 'licorice_ai_co_founder', name: 'Licorice AI Co-Founder', cost: 75000, clickBonus: 250, count: 0 }
+  { id: 'basic_laptop', name: 'Basic Laptop', cost: 25, clickBonus: 2, count: 0 },
+  { id: 'power_bank', name: 'Power Bank', cost: 150, clickBonus: 5, count: 0 },
+  { id: 'crm_software', name: 'CRM Software', cost: 750, clickBonus: 12, count: 0 },
+  { id: 'virtual_assistant', name: 'VA Assistant', cost: 3000, clickBonus: 30, count: 0 },
+  { id: 'automation_tool', name: 'Auto-Tool Suite', cost: 15000, clickBonus: 80, count: 0 },
+  { id: 'ai_co_founder', name: 'AI Co-Founder', cost: 75000, clickBonus: 250, count: 0 }
 ];
 
-// Sweet side hustle upgrades
 const BASE_UPGRADES = [
-  { id: 'candy_sales', name: 'Candy Sales Booth', cost: 75, revenue: 1, count: 0 },
-  { id: 'boba_tutoring', name: 'Boba Tutoring', cost: 300, revenue: 6, count: 0 },
-  { id: 'sweets_dropshipping', name: 'Sweet Dropshipping Store', cost: 1500, revenue: 28, count: 0 },
-  { id: 'gummy_app', name: 'Gummy Mobile App', cost: 6000, revenue: 130, count: 0 },
-  { id: 'chocolate_saaS', name: 'Chocolate SaaS Platform', cost: 30000, revenue: 750, count: 0 },
-  { id: 'candy_agency', name: 'Candy Shoppe Agency', cost: 120000, revenue: 3200, count: 0 }
+  { id: 'freelance', name: 'Freelance Gigs', cost: 75, revenue: 1, count: 0 },
+  { id: 'tutoring', name: 'Online Tutoring', cost: 300, revenue: 6, count: 0 },
+  { id: 'dropshipping', name: 'Dropshipping Store', cost: 1500, revenue: 28, count: 0 },
+  { id: 'app', name: 'Mobile App', cost: 6000, revenue: 130, count: 0 },
+  { id: 'saas', name: 'SaaS Platform', cost: 30000, revenue: 750, count: 0 },
+  { id: 'agency', name: 'Digital Agency', cost: 120000, revenue: 3200, count: 0 }
 ];
 
 function cloneBaseItems(items) {
@@ -202,7 +200,7 @@ function triggerPrestige() {
   
   const newLevel = Math.min(state.prestigeLevel + 1, 5);
   
-  addLog(`🍭 PRESTIGE! Level ${state.prestigeLevel} → ${newLevel}`);
+  addLog(`🌟 PRESTIGE! Level ${state.prestigeLevel} → ${newLevel}`);
   addLog(`   New multiplier: ${(1 + newLevel * 0.5)}x to all income`);
   
   state.prestigeLevel = newLevel;
@@ -308,11 +306,11 @@ function updateUI() {
   // Show/hide prestige button
   if (canAffordPrestige && state.prestigeLevel < 5) {
     const nextBonus = (1 + (state.prestigeLevel + 1) * 0.5);
-    prestigeBtn.innerHTML = `🍭 PRESTIGE → ${nextBonus}x multiplier`;
+    prestigeBtn.innerHTML = `🌟 Prestige → ${nextBonus}x multiplier`;
     prestigeBtn.classList.remove('hidden');
     prestigeBtn.disabled = false;
   } else if (state.prestigeLevel >= 5) {
-    prestigeBtn.textContent = '🍭 Max Level Reached';
+    prestigeBtn.textContent = '🌟 Max Level Reached';
     prestigeBtn.disabled = true;
     prestigeBtn.classList.remove('hidden');
   } else {
@@ -366,7 +364,7 @@ function switchTheme(theme) {
 }
 
 function loadTheme() {
-  const savedTheme = localStorage.getItem(THEME_KEY) || 'chewy';
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'regal';
   switchTheme(savedTheme);
 }
 

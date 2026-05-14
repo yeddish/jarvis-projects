@@ -3,14 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Empire Builder: Special Chewy Edition 🍬</title>
-  <link rel="stylesheet" href="style.css?v=3.0.0" />
+  <title>Empire Builder: Side Hustle Grind 🚀</title>
+  <link rel="stylesheet" href="style.css?v=3.0.1" />
 </head>
-<body class="theme-chewy">
-  <!-- Chewy Badge -->
-  <div id="chewy-badge" class="chewy-banner">
-    <span style="font-size: 1.5rem;">🍬</span> SPECIAL CHEWY EDITION <span style="font-size: 1.5rem;">🍭</span>
-  </div>
+<body class="theme-regal">
   <!-- Theme Toggle -->
   <div id="theme-selector" class="theme-bar">
         <button onclick="switchTheme('sunset')" class="theme-btn" data-theme="sunset">🌅</button>
@@ -18,15 +14,18 @@
         <button onclick="switchTheme('forest')" class="theme-btn" data-theme="forest">🌲</button>
         <button onclick="switchTheme('neon')" class="theme-btn" data-theme="neon">🌃</button>
         <button onclick="switchTheme('gray')" class="theme-btn" data-theme="gray">⚪</button>
-        <button onclick="switchTheme('chewy')" class="theme-btn active" data-theme="chewy">
+        <button onclick="switchTheme('regal')" class="theme-btn active" data-theme="regal">
+          <span style="font-size: 1.3rem;">👑</span>
+        </button>
+        <button onclick="switchTheme('chewy')" class="theme-btn" data-theme="chewy">
           <span style="font-size: 1.3rem;">🍬</span>
         </button>
   </div>
 
   <!-- Header -->
   <header class="game-header">
-    <h1> Empire Builder </h1>
-    <p class="subtitle">Special Chewy Edition - Sweet Side Hustles! 🍬🍭🍬</p>
+    <h1>Empire Builder</h1>
+    <p class="subtitle">Side Hustle Grind Edition</p>
         <div id="prestige-display" class="prestige-badge hidden">
           <span style="font-size: 1.2rem;">🌟</span> Prestige Level: <span id="prestige-level">0</span>
         </div>
@@ -45,48 +44,44 @@
         <p class="register-label">Click to Earn</p>
       </button>
 
-      <!-- Chewy Stats Display -->
-      <div class="stats-grid chewy-stats">
-        <div class="stat-card chewy-stat">
-          <span class="stat-label"> 🍬 Candy Cash 🍬</span>
-          <span class="stat-value" id="cash-display" style="color: #ff69b4;">$0</span>
-        </div>
+      <!-- Stats Display -->
+      <div class="stats-grid">
         <div class="stat-card">
           <span class="stat-label">Cash</span>
           <span class="stat-value" id="cash-display" style="color: var(--primary-color);">$0</span>
         </div>
-        <div class="stat-card chewy-stat">
-          <span class="stat-label">🍬 Click Power 🍬</span>
-          <span class="stat-value" id="click-power-display" style="color: #ff69b4;">$1/click</span>
+        <div class="stat-card">
+          <span class="stat-label">Click Power</span>
+          <span class="stat-value" id="click-power-display" style="color: var(--primary-color);">$1/click</span>
         </div>
-        <div class="stat-card chewy-stat">
-          <span class="stat-label">🍬 Revenue/Sec 🍬</span>
-          <span class="stat-value" id="rps-display" style="color: #ff1493;">$0/s</span>
+        <div class="stat-card">
+          <span class="stat-label">Revenue/Sec</span>
+          <span class="stat-value" id="rps-display" style="color: var(--success-color);">$0/s</span>
         </div>
       </div>
 
-      <!-- Chewy Equipment Upgrades -->
+      <!-- Equipment Upgrades -->
       <section class="upgrades-section">
-        <h2 style="color: #ff69b4;">🍬 Equipment (Candy Style!) 🍬</h2>
+        <h2 style="color: var(--primary-color);">Equipment</h2>
         <div class="upgrades-list" id="equipment-container" style="display: flex; flex-direction: column; gap: 12px;">
           <!-- Equipment injected via JS -->
         </div>
       </section>
 
-      <!-- Chewy Side Hustles Section -->
+      <!-- Business Side Hustles Section -->
       <section class="upgrades-section">
-        <h2 style="color: #ff1493;">🍬 Sweet Side Hustles 🍬</h2>
+        <h2 style="color: var(--success-color);">Side Hustles</h2>
         <div class="upgrades-list" id="upgrades-container">
           <!-- Upgrades injected via JS -->
         </div>
       </section>
 
-      <!-- Chewy Prestige Button -->
+      <!-- Prestige Button -->
       <section class="prestige-section">
-        <button id="prestige-btn" class="btn-prestige hidden chewy-prestige" onclick="triggerPrestige()">
-          <span style="font-size: 1.2rem;">🍭</span> Chewy Prestige
+        <button id="prestige-btn" class="btn-prestige hidden" onclick="triggerPrestige()">
+          <span style="font-size: 1.2rem;">🌟</span> Prestige
         </button>
-        <p class="prestige-info">Unlock at $500k lifetime earnings — permanent +50% multiplier per level (max 5) 🍭✨</p>
+        <p class="prestige-info">Unlock at $500k lifetime earnings — permanent +50% multiplier per level (max 5)</p>
         <button id="reset-save-btn" class="btn-reset" onclick="resetSave()">Reset Save</button>
       </section>
 
@@ -99,6 +94,6 @@
     </aside>
   </main>
 
-  <script src="script.js?v=3.0.0"></script>
+  <script src="script.js?v=3.0.1"></script>
 </body>
 </html>
